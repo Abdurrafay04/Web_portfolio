@@ -1,0 +1,37 @@
+window.Webflow ||= [];
+window.Webflow.push(() => {
+  //Query the elements
+  let submitBtn = document.querySelector("#mirror-submit-btn");
+  let submitBtnWrapper = document.querySelector("#submit-button__wrap");
+  let submitHoverFill = document.querySelector("#submit-hover-fill");
+
+  //Validation function for email and whatsup
+  function validation() {
+    if ($("#contactname").val() === "" || $("#email").val() === "") {
+      submitBtn.classList.add("pointer-events-off");
+      submitBtnWrapper.style.cursor = "not-allowed";
+      submitHoverFill.classList.add("is--transparent");
+    } else {
+      submitBtn.classList.remove("pointer-events-off");
+      submitBtnWrapper.style.cursor = "default";
+      submitHoverFill.classList.remove("is--transparent");
+    }
+  }
+
+  //Call function on page load
+  validation();
+
+  //Call function on input change
+  $("#contactname, #email").on("input", function () {
+    validation();
+  });
+
+  //Change red borders on input
+  $("#contactname, #email").on("input", function () {
+    if ($(this).val() === "") {
+      this.classList.add("is--redborder");
+    } else {
+      this.classList.remove("is--redborder");
+    }
+  });
+});

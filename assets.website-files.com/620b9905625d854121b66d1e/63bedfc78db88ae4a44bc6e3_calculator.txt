@@ -1,0 +1,230 @@
+//Calculator
+window.Webflow ||= []
+window.Webflow.push(() => {
+  //Disabled calculator radio buttons
+  $('.calculator__grid-item.is--disabled').find('input').attr('disabled', true)
+
+  //Additional 10 pages number input are read-only
+  $('.calculator__extra-pages-input').prop('readonly', true)
+
+  //Custom controllers for additional 10 pages number input
+  $('.stepup').on('click', function () {
+    $('.calculator__extra-pages-input')[0].stepUp()
+    if ($('.calculator__extra-pages-input').val().length > 3) {
+      $('.calculator__extra-pages-input').css(
+        'width',
+        $('.calculator__extra-pages-input').val().length + 1 + 'ch'
+      )
+    }
+  })
+  $('.stepdown').on('click', function () {
+    $('.calculator__extra-pages-input')[0].stepDown()
+    if ($('.calculator__extra-pages-input').val().length > 3) {
+      $('.calculator__extra-pages-input').css(
+        'width',
+        $('.calculator__extra-pages-input').val().length + 1 + 'ch'
+      )
+    }
+  })
+
+  //Additional 10 pages numbers hide
+  $('.calculator__extra-pages-top-wrap').css('display', 'none')
+
+  //Additional 10 pages border change
+  $('.stepup, .stepdown').on('click', function () {
+    if ($('.calculator__extra-pages-input').val() > 0) {
+      $('.calculator__grid-item-add10pages-trigger.stepup').css(
+        'border',
+        '#FF6C2C solid 0.1em'
+      )
+      $('.calculator__extra-pages-top-wrap').css('display', 'flex')
+    } else {
+      $('.calculator__extra-pages-top-wrap').css('display', 'none')
+      $('.calculator__grid-item-add10pages-trigger.stepup').css(
+        'border',
+        'transparent solid 0.1em'
+      )
+    }
+  })
+
+  //Outputs are read-only
+  $('.calculator__output-text-field').prop('readonly', true)
+
+  //Change color for calculator range inputs
+  color($('input[type=range]'))
+
+  $('input[type=range]').on('input', function () {
+    color($(this))
+  })
+
+  function color(element) {
+    let value =
+      ((element.val() - element.attr('min')) /
+        (element.attr('max') - element.attr('min'))) *
+      100
+    element.css({
+      background:
+        'linear-gradient(to right, #ff6c2c 0%, #ff6c2c ' +
+        value +
+        '%, #39414A ' +
+        value +
+        '%, #39414A 100%)',
+    })
+  }
+
+  //Add Commas function
+  function addCommas(nStr) {
+    nStr += ''
+    x = nStr.split('.')
+    x1 = x[0]
+    x2 = x.length > 1 ? '.' + x[1] : ''
+    var rgx = /(\d+)(\d{3})/
+    while (rgx.test(x1)) {
+      x1 = x1.replace(rgx, '$1' + ',' + '$2')
+    }
+    return x1 + x2
+  }
+
+  //Calculator triggers
+  calculate()
+
+  $('input')
+    .not('.calculator__contact-input')
+    .on('input', function () {
+      calculate()
+    })
+
+  $('.stepup, .stepdown').on('click', function () {
+    calculate()
+  })
+
+  //Calculator function
+  function calculate() {
+    let mainCost
+    let mainTime
+    let finalCost
+    let finalTime
+
+    //Website complexity
+    if ($('#landingPageSinglePager').is(':checked')) {
+      mainCost = 3400
+      mainTime = 12
+    } else if ($('#multiPageInfoWebsite').is(':checked')) {
+      mainCost = 6800
+      mainTime = 20
+    } else if ($('#newsWebsiteBlog').is(':checked')) {
+      mainCost = 7500
+      mainTime = 20
+    } else if ($('#eCommerceWebsite').is(':checked')) {
+      mainCost = 15000
+      mainTime = 42
+    }
+
+    finalCost = mainCost
+    finalTime = mainTime
+
+    //Main information
+    if ($('#currentWebsite').is(':checked')) {
+      finalCost = finalCost * 0.9
+      finalTime = finalTime * 0.9
+    }
+    if ($('#brandingStyleGuide').is(':checked')) {
+      finalCost = finalCost * 0.8
+      finalTime = finalTime * 0.8
+    }
+    if ($('#copyWriting').is(':checked')) {
+      finalCost = finalCost * 0.7
+      finalTime = finalTime * 0.8
+    }
+    if ($('#design').is(':checked')) {
+      finalCost = finalCost * 0.5
+      finalTime = finalTime * 0.6
+    }
+
+    //Extra components
+    if ($('#additional10pages').val() > 0) {
+      finalCost = finalCost + mainCost * $('#additional10pages').val() * 0.35
+      finalTime = finalTime + mainTime * $('#additional10pages').val() * 0.3
+    }
+    if ($('#theBlog').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.15
+      finalTime = finalTime + mainTime * 0.1
+    }
+    if ($('#analitics').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.1
+      finalTime = finalTime + mainTime * 0.1
+    }
+    if ($('#funelPlugins').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.1
+      finalTime = finalTime + mainTime * 0.1
+    }
+    if ($('#customPlagins').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.35
+      finalTime = finalTime + mainTime * 0.3
+    }
+    if ($('#calculatorCheckbox').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.2
+      finalTime = finalTime + mainTime * 0.2
+    }
+    if ($('#paymentSystem').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.2
+      finalTime = finalTime + mainTime * 0.2
+    }
+    if ($('#membershipSystem').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.2
+      finalTime = finalTime + mainTime * 0.2
+    }
+    if ($('#userAdminDashboard').is(':checked')) {
+      finalCost = finalCost + mainCost * 0.4
+      finalTime = finalTime + mainTime * 0.5
+    }
+    if ($('#interactionsAnimations').is(':checked')) {
+      finalCost = finalCost * 1.5
+      finalTime = finalTime * 1.5
+    }
+    if ($('#customArtIllustrations').is(':checked')) {
+      finalCost = finalCost * 1.5
+      finalTime = finalTime * 1.5
+    }
+
+    let speedCost
+    let speedTime
+    let qualityCost
+    let qualityTime
+
+    //Speed rate
+    if ($('#speedRate').val() == 0) {
+      speedCost = 0
+      speedTime = 0
+    }
+    if ($('#speedRate').val() == 1) {
+      speedCost = 0.3
+      speedTime = -0.2
+    }
+    if ($('#speedRate').val() == 2) {
+      speedCost = 0.5
+      speedTime = -0.4
+    }
+
+    //Quality rate
+    if ($('#qualityRate').val() == 0) {
+      qualityCost = 0
+      qualityTime = 0
+    }
+    if ($('#qualityRate').val() == 1) {
+      qualityCost = 0.2
+      qualityTime = 0.3
+    }
+    if ($('#qualityRate').val() == 2) {
+      qualityCost = 0.4
+      qualityTime = 0.5
+    }
+
+    finalCost = finalCost * (1 + (speedCost + qualityCost))
+    finalTime = finalTime * (1 + (speedTime + qualityTime))
+
+    //Outputs
+    $('#cost').val(addCommas(parseFloat(finalCost).toFixed(0)) + ' $')
+    $('#timeDays').val(Math.ceil(finalTime))
+  }
+})
