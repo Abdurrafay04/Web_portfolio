@@ -2509,9 +2509,8 @@ h1 {
 .home__img {
     position: absolute;
     right: -5%;
-    bottom: -15%;
-    width: 750px;
-    height: 950px;
+    width: 72%;
+    height: 118%;
     background-position: 50% 100%;
     background-size: contain;
     background-repeat: no-repeat
